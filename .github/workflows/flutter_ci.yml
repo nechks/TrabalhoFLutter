@@ -1,0 +1,35 @@
+name: Flutter 
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.32.5'
+          channel: 'stable'
+
+      - name: Check Flutter version
+        run: flutter --version
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Run test
+        run: |
+          if [ -d test ]; then
+            flutter test
+          else
+            echo "Diretório de testes inexistente, pulando etapa."
+          fi
+
+      - name: Build APK
+        run: flutter build apk --release
